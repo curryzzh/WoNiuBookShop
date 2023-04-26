@@ -1,9 +1,9 @@
-package com.woniu.service.impl;
+package com.woniu.servicelayer.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.woniu.entity.User;
 import com.woniu.mapper.UserMapper;
-import com.woniu.service.UserService;
+import com.woniu.servicelayer.service.UserService;
 import org.springframework.stereotype.Service;
 
 @Service

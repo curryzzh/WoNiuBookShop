@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace=".dao.TAddressDao">
+
+    <resultMap type=".entity.TAddress" id="TAddressMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="province" column="province" jdbcType="VARCHAR"/>
+        <result property="city" column="city" jdbcType="VARCHAR"/>
+        <result property="area" column="area" jdbcType="VARCHAR"/>
+        <result property="detailaddress" column="detailAddress" jdbcType="VARCHAR"/>
+        <result property="tel" column="tel" jdbcType="VARCHAR"/>
+        <result property="reciver" column="reciver" jdbcType="VARCHAR"/>
+        <result property="emailcode" column="emailCode" jdbcType="VARCHAR"/>
+        <result property="userid" column="userId" jdbcType="INTEGER"/>
+        <result property="isdefault" column="isDefault" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TAddressMap">
+        select id,
+               province,
+               city,
+               area,
+               detailAddress,
+               tel,
+               reciver,
+               emailCode,
+               userId,
+               isDefault
+        from t_address
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="TAddressMap">
+        select
+        id, province, city, area, detailAddress, tel, reciver, emailCode, userId, isDefault
+        from t_address
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="province != null and province != ''">
+                and province = #{province}
+            </if>
+            <if test="city != null and city != ''">
+                and city = #{city}
+            </if>
+            <if test="area != null and area != ''">
+                and area = #{area}
+            </if>
+            <if test="detailaddress != null and detailaddress != ''">
+                and detailAddress = #{detailaddress}
+            </if>
+            <if test="tel != null and tel != ''">
+                and tel = #{tel}
+            </if>
+            <if test="reciver != null and reciver != ''">
+                and reciver = #{reciver}
+            </if>
+            <if test="emailcode != null and emailcode != ''">
+                and emailCode = #{emailcode}
+            </if>
+            <if test="userid != null">
+                and userId = #{userid}
+            </if>
+            <if test="isdefault != null and isdefault != ''">
+                and isDefault = #{isdefault}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from t_address
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="province != null and province != ''">
+                and province = #{province}
+            </if>
+            <if test="city != null and city != ''">
+                and city = #{city}
+            </if>
+            <if test="area != null and area != ''">
+                and area = #{area}
+            </if>
+            <if test="detailaddress != null and detailaddress != ''">
+                and detailAddress = #{detailaddress}
+            </if>
+            <if test="tel != null and tel != ''">
+                and tel = #{tel}
+            </if>
+            <if test="reciver != null and reciver != ''">
+                and reciver = #{reciver}
+            </if>
+            <if test="emailcode != null and emailcode != ''">
+                and emailCode = #{emailcode}
+            </if>
+            <if test="userid != null">
+                and userId = #{userid}
+            </if>
+            <if test="isdefault != null and isdefault != ''">
+                and isDefault = #{isdefault}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into t_address(province, city, area, detailAddress, tel, reciver, emailCode, userId, isDefault)
+        values (#{province}, #{city}, #{area}, #{detailaddress}, #{tel}, #{reciver}, #{emailcode}, #{userid},
+                #{isdefault})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into t_address(province, city, area, detailAddress, tel, reciver, emailCode, userId, isDefault)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.province}, #{entity.city}, #{entity.area}, #{entity.detailaddress}, #{entity.tel},
+            #{entity.reciver}, #{entity.emailcode}, #{entity.userid}, #{entity.isdefault})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into t_address(province, city, area, detailAddress, tel, reciver, emailCode, userId, isDefault)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.province}, #{entity.city}, #{entity.area}, #{entity.detailaddress}, #{entity.tel},
+            #{entity.reciver}, #{entity.emailcode}, #{entity.userid}, #{entity.isdefault})
+        </foreach>
+        on duplicate key update
+        province = values(province),
+        city = values(city),
+        area = values(area),
+        detailAddress = values(detailAddress),
+        tel = values(tel),
+        reciver = values(reciver),
+        emailCode = values(emailCode),
+        userId = values(userId),
+        isDefault = values(isDefault)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update t_address
+        <set>
+            <if test="province != null and province != ''">
+                province = #{province},
+            </if>
+            <if test="city != null and city != ''">
+                city = #{city},
+            </if>
+            <if test="area != null and area != ''">
+                area = #{area},
+            </if>
+            <if test="detailaddress != null and detailaddress != ''">
+                detailAddress = #{detailaddress},
+            </if>
+            <if test="tel != null and tel != ''">
+                tel = #{tel},
+            </if>
+            <if test="reciver != null and reciver != ''">
+                reciver = #{reciver},
+            </if>
+            <if test="emailcode != null and emailcode != ''">
+                emailCode = #{emailcode},
+            </if>
+            <if test="userid != null">
+                userId = #{userid},
+            </if>
+            <if test="isdefault != null and isdefault != ''">
+                isDefault = #{isdefault},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from t_address
+        where id = #{id}
+    </delete>
+
+</mapper>
+

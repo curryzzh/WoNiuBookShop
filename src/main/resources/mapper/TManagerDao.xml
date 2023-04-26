@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace=".dao.TManagerDao">
+
+    <resultMap type=".entity.TManager" id="TManagerMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userCode" column="user_code" jdbcType="VARCHAR"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="userPassword" column="user_password" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="cellphone" column="cellphone" jdbcType="VARCHAR"/>
+        <result property="locked" column="locked" jdbcType="VARCHAR"/>
+        <result property="insertTime" column="insert_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TManagerMap">
+        select id,
+               user_code,
+               user_name,
+               user_password,
+               email,
+               cellphone,
+               locked,
+               insert_time,
+               update_time
+        from t_manager
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="TManagerMap">
+        select
+        id, user_code, user_name, user_password, email, cellphone, locked, insert_time, update_time
+        from t_manager
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userCode != null and userCode != ''">
+                and user_code = #{userCode}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name = #{userName}
+            </if>
+            <if test="userPassword != null and userPassword != ''">
+                and user_password = #{userPassword}
+            </if>
+            <if test="email != null and email != ''">
+                and email = #{email}
+            </if>
+            <if test="cellphone != null and cellphone != ''">
+                and cellphone = #{cellphone}
+            </if>
+            <if test="locked != null and locked != ''">
+                and locked = #{locked}
+            </if>
+            <if test="insertTime != null">
+                and insert_time = #{insertTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from t_manager
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userCode != null and userCode != ''">
+                and user_code = #{userCode}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name = #{userName}
+            </if>
+            <if test="userPassword != null and userPassword != ''">
+                and user_password = #{userPassword}
+            </if>
+            <if test="email != null and email != ''">
+                and email = #{email}
+            </if>
+            <if test="cellphone != null and cellphone != ''">
+                and cellphone = #{cellphone}
+            </if>
+            <if test="locked != null and locked != ''">
+                and locked = #{locked}
+            </if>
+            <if test="insertTime != null">
+                and insert_time = #{insertTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into t_manager(user_code, user_name, user_password, email, cellphone, locked, insert_time, update_time)
+        values (#{userCode}, #{userName}, #{userPassword}, #{email}, #{cellphone}, #{locked}, #{insertTime},
+                #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into t_manager(user_code, user_name, user_password, email, cellphone, locked, insert_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userCode}, #{entity.userName}, #{entity.userPassword}, #{entity.email}, #{entity.cellphone},
+            #{entity.locked}, #{entity.insertTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into t_manager(user_code, user_name, user_password, email, cellphone, locked, insert_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userCode}, #{entity.userName}, #{entity.userPassword}, #{entity.email}, #{entity.cellphone},
+            #{entity.locked}, #{entity.insertTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        user_code = values(user_code),
+        user_name = values(user_name),
+        user_password = values(user_password),
+        email = values(email),
+        cellphone = values(cellphone),
+        locked = values(locked),
+        insert_time = values(insert_time),
+        update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update t_manager
+        <set>
+            <if test="userCode != null and userCode != ''">
+                user_code = #{userCode},
+            </if>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="userPassword != null and userPassword != ''">
+                user_password = #{userPassword},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="cellphone != null and cellphone != ''">
+                cellphone = #{cellphone},
+            </if>
+            <if test="locked != null and locked != ''">
+                locked = #{locked},
+            </if>
+            <if test="insertTime != null">
+                insert_time = #{insertTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from t_manager
+        where id = #{id}
+    </delete>
+
+</mapper>
+

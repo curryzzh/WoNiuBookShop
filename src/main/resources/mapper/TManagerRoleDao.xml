@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace=".dao.TManagerRoleDao">
+
+    <resultMap type=".entity.TManagerRole" id="TManagerRoleMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="managerId" column="manager_id" jdbcType="INTEGER"/>
+        <result property="roleId" column="role_id" jdbcType="INTEGER"/>
+        <result property="insertTime" column="insert_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TManagerRoleMap">
+        select id,
+               manager_id,
+               role_id,
+               insert_time,
+               update_time
+        from t_manager_role
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="TManagerRoleMap">
+        select
+        id, manager_id, role_id, insert_time, update_time
+        from t_manager_role
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="managerId != null">
+                and manager_id = #{managerId}
+            </if>
+            <if test="roleId != null">
+                and role_id = #{roleId}
+            </if>
+            <if test="insertTime != null">
+                and insert_time = #{insertTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from t_manager_role
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="managerId != null">
+                and manager_id = #{managerId}
+            </if>
+            <if test="roleId != null">
+                and role_id = #{roleId}
+            </if>
+            <if test="insertTime != null">
+                and insert_time = #{insertTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into t_manager_role(manager_id, role_id, insert_time, update_time)
+        values (#{managerId}, #{roleId}, #{insertTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into t_manager_role(manager_id, role_id, insert_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.managerId}, #{entity.roleId}, #{entity.insertTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into t_manager_role(manager_id, role_id, insert_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.managerId}, #{entity.roleId}, #{entity.insertTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        manager_id = values(manager_id),
+        role_id = values(role_id),
+        insert_time = values(insert_time),
+        update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update t_manager_role
+        <set>
+            <if test="managerId != null">
+                manager_id = #{managerId},
+            </if>
+            <if test="roleId != null">
+                role_id = #{roleId},
+            </if>
+            <if test="insertTime != null">
+                insert_time = #{insertTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from t_manager_role
+        where id = #{id}
+    </delete>
+
+</mapper>
+
