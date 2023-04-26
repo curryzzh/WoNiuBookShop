@@ -15,7 +15,7 @@ public class UserController {
     UserService userService;
     @RequestMapping("/create")
     @ResponseBody
-    public ResponseEntity<?> createUser(User user){
+    public ResponseEntity<?> createUser(@RequestBody User user){
         userService.save(user);
         return ResponseEntity.ok().build();
     }
@@ -28,7 +28,7 @@ public class UserController {
 
     @RequestMapping("/update")
     @ResponseBody
-    public ResponseEntity<?> updateUser(Integer id, User user) {
+    public ResponseEntity<?> updateUser(Integer id,@RequestBody User user) {
         user.setId(id);
         userService.updateById(user);
         return ResponseEntity.ok().build();
